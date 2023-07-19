@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <div class="card text-center">
+        <div class="card-header">
+            <h2>Profile</h2>
+        </div>
+        <div class="d-flex justify-content-end">
+        <a href="{% url 'blog:profile_edit' %}" class="text-black">Edit Profile</a>
+            </div>
+        <div class="d-flex justify-content-center">
+        <img class="rounded-circle" style="width: 170px;  height: 150px; object-fit: cover;" src="{{user.image.url}}" alt="Profile Picture">
+        </div>
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>first_name: {{ user.first_name }}</p>
+        <p>last_name: {{ user.last_name }}</p>
+        <p>phone_no: {{ user.phone_no }}</p><br>
+    </div>
+        
+{% endblock %}

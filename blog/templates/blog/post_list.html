@@ -1,0 +1,44 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <!-- <h1>Filtered Posts</h1>
+        <form method="GET" action="{% url 'blog:post_list' %}">
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="">All</option>
+                {% for category in categories %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+            <br>
+        </form> -->
+    <div class="row">
+        {% for post in posts %}
+                <div class="col-sm-6">
+                <div class="card" style="height: 650px;">
+                    {% if post.thumbnail_image %}
+                    <img class="card-img-top" style="height: 350px; object-fit: cover;" src="{{ post.thumbnail_image.url }}" alt="Thumbnail Image">
+                    {% endif %} 
+                    {% if post.published_date %}    
+                    <time class="date">
+                        <p style="font-weight: bold">{{ post.published_date }}</p>
+                    </time>
+                    {% endif %} 
+                    <h2 class="card-title" ><a class=" text-dark" href="{% url 'blog:post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
+                    <form method="GET" action="{% url 'blog:post_list' %}">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category">
+                        <option value="">All</option>
+                        {% for category in categories %}
+                        <p class="card-category" style="font-weight: bold">Category: {{post.category.name}}</p>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    </form>
+                    <!-- <p class="card-category" style="font-weight: bold">Category: {{post.category.name}}</p> -->
+                    <p class="card-text" >{{ post.text|truncatechars:200 }}</p>
+                </div>
+                </div>
+        {% endfor %}
+    </div>
+{% endblock %}
