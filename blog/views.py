@@ -128,15 +128,15 @@ def profile_edit(request):
 
 def posts_by_category(request, id):
     posts = Post.objects.filter(category_id=id)
-    return render(request, 'blog/posts.html', {'posts': posts})
+    return render(request, 'blog/post_list.html', {'posts': posts})
 
 def posts_by_tag(request, id):
     posts = Post.objects.filter(tags__id=id)
-    return render(request, 'blog/posts.html', {'posts': posts})
+    return render(request, 'blog/post_list.html', {'posts': posts})
 
 def posts_by_author(request, id):
     posts=Post.objects.filter(author_id=id)
-    return render(request,'blog/posts.html',{'posts':posts})
+    return render(request,'blog/post_list.html',{'posts':posts})
 
   
 
