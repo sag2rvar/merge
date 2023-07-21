@@ -9,16 +9,12 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileEditForm
+from .models import Category
 
 
 
-def post_list(request):
+def post_list(request,): 
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
-
-    category_id = request.GET.get('category')
-    if category_id:
-        posts = posts.filter(category__id=category_id)
-        
     return render(request, 'blog/post_list.html', {'posts': posts})
 
  
@@ -26,7 +22,7 @@ def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug) 
     comment_form = CommentForm() 
     comments = Comment.objects.filter(post=post)
-    new_comment = None 
+    new_comment= None 
     parent = None
     
     if request.method == 'POST':    
@@ -53,6 +49,7 @@ def post_new(request,):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
+            print(post,'pppppppppppppp')
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
@@ -113,7 +110,7 @@ def login_view(request):
 def profile(request):
     # Retrieve the authenticated user's profile
     user = User.objects.filter(id=request.user.id).last()
-    return render(request, 'blog/profile.html', {'profile': user})
+    return render(request, 'blog/profile.html', {'user': user})
 
 def logout_view(request):
     logout(request)
@@ -127,7 +124,19 @@ def profile_edit(request):
             return redirect('blog:profile')
     else:
         form = ProfileEditForm(instance=request.user)
-    return render(request, 'blog/profile_edit.html', {'form': form})    
+    return render(request, 'blog/profile_edit.html', {'form': form})  
+
+def posts_by_category(request, id):
+    posts = Post.objects.filter(category_id=id)
+    return render(request, 'blog/posts.html', {'posts': posts})
+
+def posts_by_tag(request, id):
+    posts = Post.objects.filter(tags__id=id)
+    return render(request, 'blog/posts.html', {'posts': posts})
+
+def posts_by_author(request, id):
+    posts=Post.objects.filter(author_id=id)
+    return render(request,'blog/posts.html',{'posts':posts})
 
   
 

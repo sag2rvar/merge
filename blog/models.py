@@ -7,7 +7,7 @@ from autoslug import AutoSlugField
 class User(AbstractUser):
     email = models.EmailField(unique = True)
     phone_no = models.CharField(max_length = 10)
-    image = models.ImageField(upload_to='user_images/', blank=True, null=True) 
+    image = models.ImageField(upload_to='user_images/') 
     gender = models.CharField(max_length=10, blank=True)
     country = models.CharField(max_length=50,default='')
     city = models.CharField(max_length=50,default='')
@@ -20,7 +20,7 @@ class Category(models.Model):
     # Add any additional fields you need for the category
 
     def __str__(self):  
-        return self.name
+        return self.name    
 
 class Tag(models.Model):
     name = models.CharField(max_length=100)
@@ -40,7 +40,7 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag)
     featured_image = models.ImageField(upload_to='featured_images/', blank=True, null=True)
     thumbnail_image = models.ImageField(upload_to='thumbnail_images/', blank=True, null=True)
-    slug = AutoSlugField(populate_from=['title', 'category', 'Tag'] , unique=True)
+    slug = AutoSlugField(populate_from='title' , unique=True)
       
 
     def publish(self):
