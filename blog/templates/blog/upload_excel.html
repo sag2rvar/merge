@@ -1,0 +1,19 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<h2>Upload a Excel File</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="excel_file">
+    <input type="submit" value="Upload Excel">
+</form>
+
+{% if excel_content %}
+    <hr>
+    <h3>Uploaded Excel Content:</h3>
+    <pre>{{ excel_content|default:"No content" }}</pre>
+{% endif %}
+
+
+
+{% endblock %}

@@ -70,5 +70,18 @@ class Comment(models.Model):
         if self.parent is None:
             return True
         return False
+    
+
+
+class ExcelData(models.Model):
+    Country = models.TextField()
+    City = models.TextField()
+    Hotel = models.TextField()
+    star = models.TextField()
+    Continent = models.TextField()
+    Date = models.DateTimeField(default=timezone.now)
+    End_date = models.DateTimeField(default=timezone.now)
+    Discounted_price = models.TextField()
+
 
 

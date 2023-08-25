@@ -7,19 +7,19 @@ from .models import Comment
 
 
 class UserForm(forms.ModelForm):
-    password1 = forms.CharField(widget=forms.PasswordInput)
-    password2 = forms.CharField(widget=forms.PasswordInput, label='Confirm Password')
+    password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput, label='Confirm Password')
 
     def clean_password2(self):
-        password1 = self.cleaned_data.get("password1")
-        password2 = self.cleaned_data.get("password2")
-        if password1 and password2 and password1 != password2:
+        password = self.cleaned_data.get("password")
+        confirm_password = self.cleaned_data.get("confirm_password")
+        if password and confirm_password and password != confirm_password:
             raise forms.ValidationError("Passwords do not match")
-        return password2
+        return confirm_password
 
     class Meta:
         model = User
-        fields = ('username','email','first_name','last_name','password1','password2','image','gender','phone_no')
+        fields = ('username','email','first_name','last_name','password','confirm_password','image','gender','phone_no')
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=50)

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from .models import Post, User, Comment
+from .models import Post, User, Comment, ExcelData
 from django.shortcuts import render, get_object_or_404
 from .forms import PostForm, UserForm, LoginForm, CommentForm
 from django.contrib import messages
@@ -10,11 +10,14 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import ProfileEditForm
 from .models import Category
+import pandas as pd
 
 
 
 def post_list(request,): 
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    posts = Post.objects.filter()
+    # posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
+    print(posts,'yyyyyyyyyyyyyyyyyyyyy')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
  
@@ -49,7 +52,6 @@ def post_new(request,):
         form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
-            print(post,'pppppppppppppp')
             post.author = request.user
             post.published_date = timezone.now()
             post.save()
@@ -77,9 +79,6 @@ def signup(request):
     if request.method == 'POST':
         form = UserForm(request.POST,request.FILES)
         if form.is_valid():
-            user = form.save(commit=False)
-            password = form.cleaned_data['password1']
-            user.password = make_password(password) 
             user = form.save()
             login(request, user)
             return redirect('blog:login') 
@@ -137,6 +136,26 @@ def posts_by_tag(request, id):
 def posts_by_author(request, id):
     posts=Post.objects.filter(author_id=id)
     return render(request,'blog/post_list.html',{'posts':posts})
+
+
+def upload_excel(request):
+    excel_content = None
+    if request.method == 'POST':
+        excel_file = request.FILES['excel_file']
+        print(excel_file,'55555555555555555555555')
+
+        try:
+            excel_content = excel_file.read()  # Read binary content from the uploaded file
+        except Exception as e:
+            print(f"Error while reading the Excel file: {e}")
+        
+        # Process the Excel file, save its content, and update if needed
+        # Example code (you may need to use libraries like pandas or xlrd):
+        # excel_content = process_excel(excel_file)
+        # excel_data, created = ExcelData.objects.get_or_create(content=excel_content)
+    
+    return render(request, 'blog/upload_excel.html', {'excel_content': excel_content})
+
 
   
 
